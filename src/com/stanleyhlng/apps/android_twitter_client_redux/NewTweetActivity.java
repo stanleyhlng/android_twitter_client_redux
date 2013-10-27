@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.stanleyhlng.apps.android_twitter_client.R;
+import com.stanleyhlng.apps.android_twitter_client_redux.models.User;
 
 public class NewTweetActivity extends Activity {
 	JSONObject jsonUser = new JSONObject();
@@ -31,8 +32,9 @@ public class NewTweetActivity extends Activity {
 		setContentView(R.layout.activity_new_tweet);
 		
 		Intent intent = getIntent();
-		Log.d("DEBUG", intent.getStringExtra("user_name"));
-		
+		User user = (User) intent.getParcelableExtra("user");
+		Log.d("DEBUG", user.getJSONString());
+				
 		EditText etText = (EditText) findViewById(R.id.etBody);
 		etText.addTextChangedListener(new TextWatcher() {
 			Button btnTweet = (Button) findViewById(R.id.btnTweet);
@@ -53,25 +55,23 @@ public class NewTweetActivity extends Activity {
 		});
 		
 		ImageView imageView = (ImageView) findViewById(R.id.ivProfile);
-		ImageLoader.getInstance().displayImage(intent.getStringExtra("user_profile_image_url"), imageView);
+		ImageLoader.getInstance().displayImage(user.getProfileImageurl(), imageView);
 
 		TextView nameView = (TextView) findViewById(R.id.tvName);
-		String formattedName = String.format("<b>%s</b>", 
-				intent.getStringExtra("user_name")
+		String formattedName = String.format("<b>%s</b>",
+				user.getName()
 				);
 		nameView.setText(Html.fromHtml(formattedName));
 
 		TextView bodyView = (TextView) findViewById(R.id.tvBody);
 		String formattedBody = String.format("<small><font color='#777777'>@%s</font></small>", 
-				intent.getStringExtra("user_screen_name")
+				user.getScreenName()
 				);
 		bodyView.setText(Html.fromHtml(formattedBody));
 		
 		// formulate json object
 		try {
-			jsonUser.put("name", intent.getStringExtra("user_name"));
-			jsonUser.put("screen_name", intent.getStringExtra("user_screen_name"));
-			jsonUser.put("profile_image_url", intent.getStringExtra("user_profile_image_url"));
+			jsonUser = new JSONObject(user.getJSONString());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

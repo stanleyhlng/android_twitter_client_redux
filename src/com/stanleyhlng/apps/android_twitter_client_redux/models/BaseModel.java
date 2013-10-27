@@ -1,7 +1,5 @@
 package com.stanleyhlng.apps.android_twitter_client_redux.models;
 
-import java.io.Serializable;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

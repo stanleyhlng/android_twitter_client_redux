@@ -2,26 +2,31 @@ package com.stanleyhlng.apps.android_twitter_client_redux.fragments;
 
 import java.util.ArrayList;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.stanleyhlng.apps.android_twitter_client.R;
+import com.stanleyhlng.apps.android_twitter_client_redux.ProfileActivity;
 import com.stanleyhlng.apps.android_twitter_client_redux.TweetsAdapter;
 import com.stanleyhlng.apps.android_twitter_client_redux.models.Tweet;
 
 public class TweetsFragment extends Fragment {
 	TweetsAdapter adapter;
+	ListView lvTweets;
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		ArrayList<Tweet> tweets = new ArrayList<Tweet>();
 		
-		ListView lvTweets = (ListView) getActivity().findViewById(R.id.lvTweets);
+		lvTweets = (ListView) getActivity().findViewById(R.id.lvTweets);
 		adapter = (TweetsAdapter) new TweetsAdapter(getActivity(), tweets);
 		lvTweets.setAdapter(adapter);
 	}

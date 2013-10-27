@@ -1,17 +1,48 @@
 package com.stanleyhlng.apps.android_twitter_client_redux.models;
 
-import java.io.Serializable;
-
+import org.json.JSONException;
 import org.json.JSONObject;
 
-public class User extends BaseModel {
+import android.os.Parcel;
+import android.os.Parcelable;
 
+public class User extends BaseModel implements Parcelable {
+	
+	public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+
+		@Override
+		public User createFromParcel(Parcel source) {
+			return new User(source);
+		}
+
+		@Override
+		public User[] newArray(int size) {
+			return new User[size];
+		}
+		
+	};
+	
+	public User() {
+	}
+	
+	public User(Parcel source) {
+		try {
+			jsonObject = new JSONObject(source.readString());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public String getName() {
 		return getString("name");
 	}
 	
 	public long getId() {
 		return getLong("id");
+	}
+	
+	public String getTagline() {
+		return getString("description");
 	}
 	
 	public String getScreenName() {
@@ -49,5 +80,15 @@ public class User extends BaseModel {
 		}
 		
 		return user;
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(jsonObject.toString());
 	}
 }

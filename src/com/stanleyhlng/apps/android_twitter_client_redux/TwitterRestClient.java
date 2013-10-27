@@ -24,8 +24,8 @@ import com.loopj.android.http.RequestParams;
 public class TwitterRestClient extends OAuthBaseClient {
     public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class; // Change this
     public static final String REST_URL = "https://api.twitter.com/1.1"; // Change this, base API URL
-    public static final String REST_CONSUMER_KEY = "MeKRFF3E7pQvDc7eKlOnCA";       // Change this
-    public static final String REST_CONSUMER_SECRET = "SekT5wwHfuDKvHuxcrxposdDVyuafUfewYOJ8xXJY"; // Change this
+    public static final String REST_CONSUMER_KEY = "<YOUR_KEY>";       // Change this
+    public static final String REST_CONSUMER_SECRET = "<YOUR_SECRET>"; // Change this
     public static final String REST_CALLBACK_URL = "oauth://android_twitter_client"; // Change this (here and in manifest)
     
     public TwitterRestClient(Context context) {
@@ -43,6 +43,13 @@ public class TwitterRestClient extends OAuthBaseClient {
     // https://dev.twitter.com/docs/api/1.1/get/statuses/home_timeline
     public void getMentionsTimeline(RequestParams params, AsyncHttpResponseHandler handler) {
     	String url = getApiUrl("statuses/mentions_timeline.json");
+    	client.get(url, params, handler);
+    }
+
+    // GET statuses/user_timeline
+    // https://dev.twitter.com/docs/api/1.1/get/statuses/user_timeline
+    public void getUserTimeline(RequestParams params, AsyncHttpResponseHandler handler) {
+    	String url = getApiUrl("statuses/user_timeline.json");
     	client.get(url, params, handler);
     }
 

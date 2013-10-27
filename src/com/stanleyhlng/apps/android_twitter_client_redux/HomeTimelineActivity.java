@@ -1,5 +1,6 @@
 package com.stanleyhlng.apps.android_twitter_client_redux;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.TargetApi;
@@ -21,15 +22,18 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.stanleyhlng.apps.android_twitter_client.R;
 import com.stanleyhlng.apps.android_twitter_client_redux.fragments.HomeTimelineFragment;
 import com.stanleyhlng.apps.android_twitter_client_redux.fragments.MentionsTimelineFragment;
+import com.stanleyhlng.apps.android_twitter_client_redux.models.Tweet;
 import com.stanleyhlng.apps.android_twitter_client_redux.models.User;
 
 public class HomeTimelineActivity extends FragmentActivity implements TabListener {
 	private User user;
+	private HomeTimelineFragment homeTimelineFragment;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +82,12 @@ public class HomeTimelineActivity extends FragmentActivity implements TabListene
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		
 		switch (item.getItemId()) {
+			/*
 			case R.id.action_refresh:
 				Toast.makeText(getBaseContext(), getString(R.string.action_refresh), Toast.LENGTH_SHORT).show();
-
-				/*
 				RequestParams params = new RequestParams();
 				params.put("count", "25");
 				TwitterRestClientApp.getRestClient().getHomeTimeline(params, new JsonHttpResponseHandler() {
@@ -96,19 +101,20 @@ public class HomeTimelineActivity extends FragmentActivity implements TabListene
 					}
 					
 				});
-				*/
-				
 				break;
-				
+			*/
 			case R.id.action_new:
 				Toast.makeText(getBaseContext(), getString(R.string.action_new), Toast.LENGTH_SHORT).show();
-								
-				Intent intent = new Intent(getBaseContext(), NewTweetActivity.class);
-				intent.putExtra("user_name", user.getName());
-				intent.putExtra("user_screen_name", user.getScreenName());
-				intent.putExtra("user_profile_image_url", user.getProfileImageurl());
+				intent = new Intent(getBaseContext(), NewTweetActivity.class);
+				intent.putExtra("user", user);
 				startActivityForResult(intent, 0);
-				
+				break;
+		
+			case R.id.action_profile:
+				Toast.makeText(getBaseContext(), getString(R.string.action_profile), Toast.LENGTH_SHORT).show();
+				intent = new Intent(getBaseContext(), ProfileActivity.class);
+				intent.putExtra("user", user);
+				startActivity(intent);
 				break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -116,7 +122,6 @@ public class HomeTimelineActivity extends FragmentActivity implements TabListene
 	
 	// Handle the result once the activity returns a result
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		/*
 		if (requestCode == 0) {
 			if (resultCode == RESULT_OK) {
 				String result = data.getStringExtra("result");
@@ -136,8 +141,8 @@ public class HomeTimelineActivity extends FragmentActivity implements TabListene
 						@Override
 						public void onSuccess(JSONObject jsonTweet) {						
 							Tweet tweet = Tweet.fromJson(jsonTweet);
-							tweetsFragment.getAdapter().insert(tweet, 0);
-						
+							homeTimelineFragment.getAdapter().insert(tweet, 0);
+							
 							Log.d("DEBUG", jsonTweet.toString());
 						}
 						
@@ -148,7 +153,6 @@ public class HomeTimelineActivity extends FragmentActivity implements TabListene
 				}
 			}
 		}
-		*/
 	}
 	
 	private void setupNavigationTabs() {
@@ -181,7 +185,8 @@ public class HomeTimelineActivity extends FragmentActivity implements TabListene
 		android.support.v4.app.FragmentTransaction fts = manager.beginTransaction();
 		if (tab.getTag() == "HomeTimelineFragment") {
 			// set the fragment in frameLayoutContainer to home timeline
-			fts.replace(R.id.frameLayoutContainer, new HomeTimelineFragment());
+			homeTimelineFragment = new HomeTimelineFragment();
+			fts.replace(R.id.frameLayoutContainer, homeTimelineFragment);
 		} else {
 			// set the fragment in frameLayoutContainer to mentions timeline
 			fts.replace(R.id.frameLayoutContainer, new MentionsTimelineFragment());			
