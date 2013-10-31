@@ -35,3 +35,7 @@ Extend simple Twitter Client app that supports tabbed interface and fragments.
 * Explore how to define and load fragment views both statically and dynamically
 * Explore using fragments for the purpose of reusability with listview of tweets in home timeline and user profile
 * Explore using fragments for navigation with action bar with tabs
+
+## Screenshots
+![screenshots_1](https://raw.github.com/stanleyhlng/android_twitter_client_redux/master/screenshots/twitter_client_redux_screenshot_1.png
+)
